@@ -1,0 +1,77 @@
+﻿@model Arcus10.Models.Users
+
+@{
+    ViewBag.Title = "Edit User | " + ViewBag.pagename;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit User</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formEditUser" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <div class="container" id="page-profile">
+        <div class="jumbotron">
+            <div class="row">
+                <form role="form">
+                    <div class="col-lg-8">
+                        <div class="form-group col-lg-8">
+                            <label for="InputName">Email</label>
+                            <div class="input-group ">
+                                @Html.TextBoxFor(model => model.username, new { @Value = Model.username, @class = "form-control", disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-10">
+                            <label for="InputName">Full Name</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.fullname, new { @Value = Model.fullname, placeholder = "Full Name", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-10">
+                            <label for="InputName">Role</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.role, new { @Value = Model.role, placeholder = "Role", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <label for="InputEmail">Update Password</label>
+                            <div class="input-group">
+                                @Html.PasswordFor(model => model.password, new { placeholder = "Password", @class = "form-control", type = "password" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <button class="btn btn-primary" id="submit-profile-update" type="submit">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                        </div>
+
+                    </div>
+                </form>
+                <div class="col-lg-4">
+                    <div class="col-md-8">
+                        @if (ViewData["Message"] != null)
+                        {
+                            <div class="alert alert-success">
+                                <strong><span class="glyphicon glyphicon-ok"></span> Updated Successfully</strong>
+                            </div>
+                        }
+
+                        <div id="showValidationProfile" class="alert alert-danger" style="display:none;">
+                            <strong> @Html.ValidationSummary(true)</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        <div class=" col-md-2 pull-left">
+            <ul class="pager">
+                <li class="previous">@Html.ActionLink("← Back", "Index")</li>
+            </ul>
+        </div>
+
+    </p>
+
+}

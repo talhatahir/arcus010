@@ -1,0 +1,21 @@
+Guests----
+Page loads with pagination and first 15 records with search possibility and add guest options.
+User can click on any guest to view its info and it will have edit option and remove.
+Add Guest (All
+Remove Guest (Admin
+Edit Guest (All
+
+
+Staff--
+Same as above with its own information.(Admin
+All rights are give to admin.
+
+
+Users--
+Same as above with its own information.(Admin
+Edit your full name, password(All
+Edit role of a user (Admin
+
+
+
+/*Give all rights to NT AUTHORITY\SYSTEM except deny_dbwrite and deny_dbread and make him owner, also add to schemas   */

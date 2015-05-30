@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Login | Arcus";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/shieldui-all.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+    <script type="text/javascript" src="http://www.prepbootstrap.com/Content/js/gridData.js"></script>
+
+
+
+</head>
+<body>
+    <div id="wrapper">
+      
+
+
+
+        @RenderBody()
+
+
+    </div>
+    <!-- /#wrapper -->
+    <div class="footer">
+        <div class="container">
+            <p class="text-muted" style="font-size:10px;">A Product of <a href="http://www.artefaktsolutions.com/"><img height="20" alt="Arcus" src="http://localhost/hhh-artefakt//assets/images/arbw.png"></a></p>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            if ($('.validation-summary-errors').length > 0) {
+                $('#showValidationJq').show();
+            }
+
+
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
