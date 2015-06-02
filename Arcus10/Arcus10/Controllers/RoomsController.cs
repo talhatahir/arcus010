@@ -10,17 +10,15 @@ using System.Data.SqlClient;
 using PagedList.Mvc;
 using PagedList;
 
-
 namespace Arcus10.Controllers
 {
-
-    public class UsersController : Controller
+    public class RoomsController : Controller
     {
         DBQuery dbWrapper = new DBQuery();
         //
-        // GET: /Users/
+        // GET: /Rooms/
 
-        public ActionResult Index(int? page,string q=null)
+        public ActionResult Index(int? page, string q = null)
         {
             if (checkIfSessionPresent() == false)
             {
@@ -32,19 +30,19 @@ namespace Arcus10.Controllers
             ViewBag.fullname = userdata.fullname + " ";
             ViewBag.pagename = "Main";
 
-            List<Users> dtUsers = new List<Users>();
+            List<Rooms> dtRooms = new List<Rooms>();
 
-            dtUsers = (q==null) ? dbWrapper.getUsersData(userdata.user_id.ToString()) : dbWrapper.searchUserData(q,userdata.user_id.ToString());
-                IQueryable<Users> query = dtUsers.AsQueryable();
+            dtRooms = (q == null) ? dbWrapper.getRoomsData(userdata.user_id.ToString()) : dbWrapper.searchRoomData(q);
+            IQueryable<Rooms> query = dtRooms.AsQueryable();
 
             ViewBag.query = q;
             var pageNumber = page ?? 1;// if no page was specified in the querystring, default to the first page (1)
-            var pagedUsers = query.ToPagedList(pageNumber, 10); // will only contain 10 products max because of the pageSize
-            
-            return View(pagedUsers);
+            var pagedRooms = query.ToPagedList(pageNumber, 10); // will only contain 10 products max because of the pageSize
+
+            return View(pagedRooms);
         }
 
-     
+
 
 
         public bool checkIfSessionPresent()
@@ -66,8 +64,8 @@ namespace Arcus10.Controllers
         }
 
         //
-        // GET: /Users/Details/5
-
+        // GET: /Rooms/Details/5
+     
         public ActionResult Details(string id)
         {
             if (checkIfSessionPresent() == false)
@@ -75,9 +73,9 @@ namespace Arcus10.Controllers
                 return RedirectToAction("Index", "Main");
             }
 
-            Users resUser = dbWrapper.getUserData(id);
+            Rooms resRoom = dbWrapper.getRoomData(id);
 
-            if (resUser.username == "Empty")
+            if (resRoom.room_number == "Empty")
             {
                 return RedirectToAction("Logout");
             }
@@ -87,11 +85,11 @@ namespace Arcus10.Controllers
             ViewBag.fullname = userdata.fullname + " ";
             ViewBag.pagename = "Details";
 
-            return View(resUser);
+            return View(resRoom);
         }
-
+         
         //
-        // GET: /Users/Create
+        // GET: /Rooms/Create
 
         public ActionResult Create()
         {
@@ -109,21 +107,21 @@ namespace Arcus10.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Users UserModel)
+        public ActionResult Create(Rooms RoomModel)
         {
             try
             {
 
-                bool resEmailCheck = dbWrapper.verifyUserEmailBeforeInsert(UserModel.username);
+                bool resRoomCheck = dbWrapper.verifyRoomNumberBeforeInsert(RoomModel.room_number);
 
-                if (resEmailCheck)
+                if (resRoomCheck)
                 {
-                    ModelState.AddModelError("", "Email/username already taken, Please enter new.");
+                    ModelState.AddModelError("", "Room Number already taken, Please enter new.");
                 }
                 else
                 {
 
-                    bool resCreateUser = dbWrapper.createNewUser(UserModel);
+                    bool resCreateUser = dbWrapper.createNewRoom(RoomModel);
 
                     if (resCreateUser == false)
                     {
@@ -133,7 +131,7 @@ namespace Arcus10.Controllers
                 }
 
 
-                ViewBag.pagename = "Create New User";
+                ViewBag.pagename = "Create New Room";
                 ViewData["Message"] = "Success";
                 return View();
 
@@ -146,8 +144,8 @@ namespace Arcus10.Controllers
         }
 
         //
-        // GET: /Users/Edit/5
-
+        // GET: /Rooms/Edit/5
+       
         public ActionResult Edit(string id)
         {
             if (checkIfSessionPresent() == false)
@@ -155,9 +153,9 @@ namespace Arcus10.Controllers
                 return RedirectToAction("Index", "Main");
             }
 
-            Users resUser = dbWrapper.getUserData(id);
+            Rooms resRoom = dbWrapper.getRoomData(id);
 
-            if (resUser.username == "Empty")
+            if (resRoom.room_number == "Empty")
             {
                 return RedirectToAction("Logout");
             }
@@ -165,36 +163,36 @@ namespace Arcus10.Controllers
             Users userdata = Session["user_data"] as Users;
 
             ViewBag.fullname = userdata.fullname + " ";
-            ViewBag.pagename = "Edit User";
+            ViewBag.pagename = "Edit Room";
 
-            return View(resUser);
+            return View(resRoom);
         }
 
         //
-        // POST: /Users/Edit/5
+        // POST: /Rooms/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(Users ProfileModel, string id)
+        public ActionResult Edit(Rooms RoomModel, string id)
         {
             try
             {
-                bool resUpdateUser = dbWrapper.editUserData(ProfileModel,id);
+                bool resUpdateRoom = dbWrapper.editRoomData(RoomModel, id);
 
-                if (resUpdateUser == false)
+                if (resUpdateRoom == false)
                 {
                     ModelState.AddModelError("", "An Error occured in the System, Please try again later");
                 }
 
 
-                Users resUser = dbWrapper.getUserData(id);
+                Rooms res = dbWrapper.getRoomData(id);
 
 
                 Users ud = Session["user_data"] as Users;
 
                 ViewBag.fullname = ud.fullname + " ";
-                ViewBag.pagename = "Edit User";
+                ViewBag.pagename = "Edit Room";
                 ViewData["Message"] = "Success";
-                return View(resUser);
+                return View(res);
 
             }
             catch (Exception ex)
@@ -203,24 +201,23 @@ namespace Arcus10.Controllers
             }
 
         }
-
-       
+         
         //
-        // POST: /Users/Delete/5
+        // POST: /Rooms/Delete/5
 
         [HttpPost]
         public ActionResult Delete(string id)
         {
             try
             {
-                bool resDeleteUser = dbWrapper.deleteUserdata(id);
+                bool resDeleteUser = dbWrapper.deleteRoomdata(id);
 
                 if (resDeleteUser == false)
                 {
-                    TempData["Message"]= "An Error occured in the System, Please try again later";
+                    TempData["Message"] = "An Error occured in the System, Please try again later";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -230,5 +227,6 @@ namespace Arcus10.Controllers
             return RedirectToAction("Index");
 
         }
+        
     }
 }

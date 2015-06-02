@@ -1,0 +1,149 @@
+﻿@model Arcus10.Models.Rooms
+
+@{
+    ViewBag.Title = "Users | " + ViewBag.pagename;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<h2>Create New Room</h2>
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formUserCreate" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <div class="container" id="page-createuser">
+        <div class="jumbotron">
+            <div class="row">
+                <form role="form">
+                    <div class="col-lg-8">
+                        <div class="form-group col-lg-8">
+                            <label for="InputName">Room Number</label>
+                            <div class="input-group ">
+                                @Html.TextBoxFor(model => model.room_number, new { placeholder = "Room Number", @class = "form-control", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <label for="InputName">Room Name</label>
+                            <div class="input-group ">
+                                @Html.TextBoxFor(model => model.room_name, new { placeholder = "Room Name", @class = "form-control", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-10">
+                            <label for="InputName">Room Type</label>
+                            <div class="input-group col-lg-8">
+                                <select class="form-control" id="select_room_type">
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                    <option>Deluxe</option>
+                                    <option>Suite</option>
+                                </select>
+                                <div class="hide">
+                                    @Html.TextBoxFor(model => model.room_type, new { @Value = "Small",  placeholder = "Room Type", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="InputEmail">Room Price</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.room_cost, new { placeholder = "Room Price", @class = "form-control", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="InputEmail">Room Capacity</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.room_capacity, new { placeholder = "Room Capacity", @class = "form-control", required = "required" })
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="InputEmail">Room Status</label>
+                            <div class="input-group">
+                                <select class="form-control" id="select_room_status">
+                                    <option>Active</option>
+                                    <option>InActive</option>
+                                </select>
+                                <div class="hide">
+                                    @Html.TextBoxFor(model => model.room_status, new { @Value = "Active", placeholder = "Room Status", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="InputEmail">Room Availability</label>
+                            <div class="input-group">
+                                <select class="form-control" id="select_room_availability">
+                                    <option>Available</option>
+                                    <option>UnAvailable</option>
+                                </select>
+                                <div class="hide">
+                                    @Html.TextBoxFor(model => model.room_availability, new { @Value = "Available", placeholder = "Room Availability", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-8">
+                            <button class="btn btn-primary" id="submit-user-create" type="submit">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                        </div>
+
+                    </div>
+                </form>
+                <div class="col-lg-4">
+                    <div class="col-md-12">
+                        @if (ViewData["Message"] != null)
+                        {
+                            <div class="alert alert-success">
+                                <strong><span class="glyphicon glyphicon-ok"></span> Updated Successfully</strong>
+                            </div>
+                        }
+
+                        <div id="showValidationCreateUser" class="alert alert-danger" style="display:none;">
+                            <strong> @Html.ValidationSummary(true)</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+<p>
+    <div class=" col-md-2 pull-left">
+        <ul class="pager">
+            <li class="previous">@Html.ActionLink("← Back", "Index")</li>
+        </ul>
+    </div>
+</p>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Select DropDown to Input Field
+        $("#select_room_type").change(function () {
+            var str = "";
+            str = $("#select_room_type option:selected").text();
+            $("#room_type").val(str);
+        });
+
+            //room Status
+        $("#select_room_status").change(function () {
+            var str = "";
+            str = $("#select_room_status option:selected").text();
+            $("#room_status").val(str);
+        });
+
+      
+        //Room Available
+        $("#select_room_availability").change(function () {
+            var str = "";
+            str = $("#select_room_availability option:selected").text();
+            $("#room_availability").val(str);
+        });
+
+    });
+
+
+</script>

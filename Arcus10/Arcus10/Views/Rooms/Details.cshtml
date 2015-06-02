@@ -1,0 +1,85 @@
+﻿@model Arcus10.Models.Rooms
+
+
+@{
+    ViewBag.Title = "Rooms | " + ViewBag.pagename;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+
+<hr />
+<div class="container" id="page-roomdetails">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group col-lg-10">
+                    <label for="InputName">Room Number</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.room_number, new { @Value = Model.room_number, disabled = "disabled", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-8">
+                    <label for="InputName">Room Name</label>
+                    <div class="input-group ">
+                        @Html.TextBoxFor(model => model.room_name, new { @Value = Model.room_name, @class = "form-control", disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-10">
+                    <label for="InputName">Room Type</label>
+                    <div class="input-group col-lg-8">
+                        @Html.TextBoxFor(model => model.room_type, new { @Value = Model.room_type, disabled = "disabled", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="InputEmail">Room Price</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.room_cost, new { @Value = Model.room_cost, disabled = "disabled", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="InputEmail">Room Capacity</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.room_capacity, new { @class = "form-control", @Value = Model.room_capacity, disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <label for="InputEmail">Room Status</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.room_status, new { @Value = Model.room_status, disabled = "disabled", @class = "form-control" })
+                    </div>
+                </div>     
+                <div class="form-group col-lg-6">
+                    <label for="InputEmail">Room Availability</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.room_availability, new { @Value = Model.room_availability, disabled = "disabled", @class = "form-control" })
+                    </div>
+                </div>              
+                
+                <div class="form-group col-lg-8">
+                    <button class="btn btn-warning" onclick="editRoom(this)" id="submit-profile-update" type="submit">&nbsp;&nbsp;Edit&nbsp;&nbsp;</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <span style="display:none"> @Html.ActionLink("Edit", "Edit", new { id = Model.room_number }, new { @class = "actionlnkClick" }) </span>
+</div>
+
+<p>
+    <div class=" col-md-2 pull-left">
+        <ul class="pager">
+            <li class="previous">@Html.ActionLink("← Back", "Index")</li>
+        </ul>
+    </div>
+
+</p>
+<script>
+    function editRoom(obj) {
+        $('#page-roomdetails').find('a.actionlnkClick')[0].click();
+    }
+
+</script>
+

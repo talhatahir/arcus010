@@ -36,8 +36,8 @@
                     <li><a href="timeline.html"><i class="fa fa-font"></i> Timeline</a></li>
                     <li><a href="forms.html"><i class="fa fa-list-ol"></i> Forms</a></li>
                     <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
-                    <li><a href="bootstrap-elements.html"><i class="fa fa-list-ul"></i> Bootstrap Elements</a></li>
-                    <li ><a href="~/Users" title="Users"><i class="fa fa-table"></i> Users</a></li>
+                    <li><a href="~/Rooms" title="Rooms"><i class="fa fa-list-ul"></i> Rooms</a></li>
+                    <li><a href="~/Users" title="Users"><i class="fa fa-table"></i> Users</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-user">
                     <li class="dropdown messages-dropdown">
@@ -94,9 +94,8 @@
 
 
             //Select active menu item
-            $("left-menu-main-nav");
 
-            $("#left-menu-main-nav").find('li').each(function(){
+            $("#left-menu-main-nav").find('li').each(function () {
                 $(this).removeAttr("class");
             });
 
@@ -105,13 +104,14 @@
             splitMenu = splitMenu[4];
             if (splitMenu.indexOf("?") > 0) {
                 splitMenu = splitMenu.substr(0, splitMenu.indexOf("?"));
-            }           
+            }
 
             var str_find = 'a[title=' + splitMenu + ']';
 
             $('#left-menu-main-nav').find(str_find).closest('li').attr('class', 'active');
-            
+            /////
 
+            //validation for Profile
             if ($('#page-profile .validation-summary-errors ul li').text() != "") {
                 $('#showValidationProfile').parent().find('.alert-success').hide();
                 $('#showValidationProfile').show();
@@ -121,16 +121,18 @@
                 $('#showValidationCreateUser').parent().find('.alert-success').hide();
                 $('#showValidationCreateUser').show();
             }
+            //////
 
+
+            //Search User Info
             $("#searchUser").keypress(function (e) {
                 if (e.which == 13) {
                     submitSearchUser();
                 }
-                
             });
 
 
-
+            ///Profile Update and Validation
             $('#formProfileUpdate').submit(function (e) {
 
                 if ($("#confirmpassword").val() != "" && $("#password").val() == "") {
@@ -149,8 +151,8 @@
                 }
             });
 
+            //Delete User
             $("a.user_del").click(function () {
-
                 $('#myModalDelUser').modal('show');
                 var str_id = $(this).parent().find('a')[0].href;
                 str_id = str_id.replace("Edit", "Delete");
@@ -158,11 +160,27 @@
 
             });
 
+
+            //Delete Room
+            $("a.room_del").click(function () {
+                $('#myModalDelRoom').modal('show');
+                var str_id = $(this).parent().find('a')[0].href;
+                str_id = str_id.replace("Edit", "Delete");
+                $("#myModalDelRoom").find('#delformroom').attr("action", str_id);
+
+            });
+
+            //Submit Delete User Form
             $("#submit-del-us").click(function () {
                 $("#delformuser").submit();
             });
 
+            //Submit Delete Room Form
+            $("#submit-del-room").click(function () {
+                $("#delformroom").submit();
+            });
 
+        
 
         });
     </script>

@@ -64,6 +64,94 @@ namespace Arcus10.DAL
 
         }
 
+        public List<Rooms> getRoomsData(string id)
+        {
+            List<Rooms> lstRooms = new List<Rooms>();
+            DBContext db = new DBContext();
+
+            string str = "select * from Rooms  order by room_id asc";
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "RoomsTable");
+
+                foreach (DataRow row in ds.Tables["RoomsTable"].Rows)
+                {
+                    Rooms temp = new Rooms();
+
+                    temp.room_number = row["room_number"].ToString();
+                    temp.room_status = row["room_status"].ToString();
+                    temp.room_type = row["room_type"].ToString();
+                    temp.room_cost = row["room_cost"].ToString();
+                    temp.room_capacity = row["room_capacity"].ToString();
+                    temp.room_name = row["room_name"].ToString();
+                    temp.room_availability = row["room_availability"].ToString(); 
+
+                    lstRooms.Add(temp);
+                }
+
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return lstRooms;
+
+        }
+
+        public bool deleteRoomdata(string roomnumber)
+        {
+            DBContext db = new DBContext();
+
+            string str = "delete from Rooms where room_number=@roomnumber";
+
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("roomnumber", roomnumber));
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    connection.Close();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+        }
+
 
         public List<Users> searchUserData(string query, string id)
         {
@@ -112,6 +200,57 @@ namespace Arcus10.DAL
         }
 
 
+        public List<Rooms> searchRoomData(string query)
+        {
+            List<Rooms> lstRooms = new List<Rooms>();
+            DBContext db = new DBContext();
+
+            string str = "select * from Rooms where room_name LIKE '%' + @query1 + '%' order by room_name asc";
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("query1", query));
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "RoomsTable");
+
+                foreach (DataRow row in ds.Tables["RoomsTable"].Rows)
+                {
+                    Rooms temp = new Rooms();
+
+                    temp.room_number = row["room_number"].ToString();
+                    temp.room_status = row["room_status"].ToString();
+                    temp.room_type = row["room_type"].ToString();
+                    temp.room_cost = row["room_cost"].ToString();
+                    temp.room_capacity = row["room_capacity"].ToString();
+                    temp.room_name = row["room_name"].ToString();
+                    temp.room_availability = row["room_availability"].ToString(); 
+
+
+                    lstRooms.Add(temp);
+                }
+
+                connection.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return lstRooms;
+
+        }
+
+
 
         public bool verifyUserEmailBeforeInsert(string username)
         {
@@ -131,11 +270,57 @@ namespace Arcus10.DAL
                 }
 
 
-                if (cmd.ExecuteNonQuery() > 0)
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "UsersTable");
+
+                if (ds.Tables["UsersTable"].Rows.Count > 0)
                 {
                     connection.Close();
                     return true;
                 }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+
+        public bool verifyRoomNumberBeforeInsert(string roomnumber)
+        {
+            DBContext db = new DBContext();
+
+            string str = "select room_number from Rooms where room_number=@roomnumber";
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("roomnumber", roomnumber));
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "RoomsTable");
+
+                if (ds.Tables["RoomsTable"].Rows.Count > 0)
+                {
+                    connection.Close();
+                    return true;
+                }
+
                 else
                 {
                     return false;
@@ -162,6 +347,49 @@ namespace Arcus10.DAL
             cmd.Parameters.Add(new SqlParameter("password", model.password));
             cmd.Parameters.Add(new SqlParameter("role", model.role));
             cmd.Parameters.Add(new SqlParameter("fullname", model.fullname));
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    connection.Close();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public bool createNewRoom(Rooms model)
+        {
+            DBContext db = new DBContext();
+
+            string str = "INSERT INTO Rooms (room_number, room_type, room_name, room_capacity,room_cost,room_status,room_availability) VALUES (@room_number,@room_type,@room_name,@room_capacity,@room_cost,@room_status,@room_availability)";
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("room_number", model.room_number));
+            cmd.Parameters.Add(new SqlParameter("room_type", model.room_type));
+            cmd.Parameters.Add(new SqlParameter("room_name", model.room_name));
+            cmd.Parameters.Add(new SqlParameter("room_capacity", model.room_capacity));
+            cmd.Parameters.Add(new SqlParameter("room_cost", model.room_cost));
+            cmd.Parameters.Add(new SqlParameter("room_status", model.room_status));
+            cmd.Parameters.Add(new SqlParameter("room_availability", model.room_availability));
 
             try
             {
@@ -333,6 +561,58 @@ namespace Arcus10.DAL
 
         }
 
+        public Rooms getRoomData(string roomnumber)
+        {
+
+            Rooms roomData = new Rooms();
+
+            roomData.room_number = "Empty";
+
+            DBContext db = new DBContext();
+
+            string str = "select * from Rooms where room_number=@roomnumber";
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("roomnumber", roomnumber));
+
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds, "RoomsTable");
+
+               foreach (DataRow row in ds.Tables["RoomsTable"].Rows)
+                {
+                    roomData.room_number = row["room_number"].ToString();
+                    roomData.room_status = row["room_status"].ToString();
+                    roomData.room_type = row["room_type"].ToString();
+                    roomData.room_cost = row["room_cost"].ToString();
+                    roomData.room_capacity = row["room_capacity"].ToString();
+                    roomData.room_name = row["room_name"].ToString();
+                    roomData.room_availability = row["room_availability"].ToString(); 
+                }
+
+                connection.Close();
+
+                return roomData;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
+
+        }
+
         public Users loginUser(Users model)
         {
             DBContext db = new DBContext();
@@ -438,6 +718,52 @@ namespace Arcus10.DAL
 
 
         }
+
+
+        public bool editRoomData(Rooms model, string id)
+        {
+            DBContext db = new DBContext();
+
+            string str = "update Rooms set room_type=@room_type, room_name=@room_name, room_capacity=@room_capacity,room_cost=@room_cost,room_status=@room_status,room_availability=@room_availability where room_number=@room_number";
+
+           
+
+            SqlConnection connection = new SqlConnection(db.getConnection());
+            SqlCommand cmd = new SqlCommand(str, connection);
+            cmd.Parameters.Add(new SqlParameter("room_type", model.room_type));
+            cmd.Parameters.Add(new SqlParameter("room_name", model.room_name));
+            cmd.Parameters.Add(new SqlParameter("room_capacity", model.room_capacity));
+            cmd.Parameters.Add(new SqlParameter("room_cost", model.room_cost));
+            cmd.Parameters.Add(new SqlParameter("room_status", model.room_status));
+            cmd.Parameters.Add(new SqlParameter("room_availability", model.room_availability));
+            cmd.Parameters.Add(new SqlParameter("room_number", id));
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    connection.Close();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public bool updateUser(Users model)
         {
             DBContext db = new DBContext();
